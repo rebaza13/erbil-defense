@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Qelay Hewlêr">
+<title>Qelay Hewlêr</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #120c06; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+  canvas { display: block; touch-action: none; }
+  #rotate { display: none; position: fixed; inset: 0; background: #120c06; color: #f3e6c4; font: bold 26px Georgia, serif; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+  @media (orientation: portrait) { #rotate { display: flex; } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="rotate">Turn your phone sideways to defend Erbil</div>
+<script>
+  // load scripts in order; timestamp avoids stale caches while developing
+  (function () {
+    var files = ['assets/manifest.js', 'js/data.js', 'js/core.js', 'js/i18n.js', 'js/sky.js', 'js/fx.js', 'js/music.js', 'js/battle.js', 'js/ui.js'], v = Date.now();
+    (function next(i) { if (i >= files.length) return; var s = document.createElement('script'); s.src = files[i] + '?v=' + v; s.onload = function () { next(i + 1); }; document.body.appendChild(s); })(0);
+  })();
+</script>
+<script>
+  // offline install (iPhone: Share > Add to Home Screen). Not inside the native app shells.
+  if ('serviceWorker' in navigator && location.protocol === 'https:' && !window.Capacitor) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>

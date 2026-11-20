@@ -1,0 +1,34 @@
+# Builds the iPhone app on a GitHub macOS machine (no Mac needed).
+# Output: an UNSIGNED QelayHewler.ipa artifact. Install it from Windows with Sideloadly
+# (signs it with your free Apple ID; free signing lasts 7 days, then re-install).
+name: Build iOS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  ios:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx cap sync ios
+      - name: Install CocoaPods dependencies
+        run: cd ios/App && pod install
+      - name: Build unsigned archive
+        run: |
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -archivePath build/App.xcarchive archive \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+      - name: Package .ipa
+        run: |
+          mkdir -p Payload
+          cp -R build/App.xcarchive/Products/Applications/App.app Payload/
+          zip -qr QelayHewler.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: QelayHewler-ios
+          path: QelayHewler.ipa

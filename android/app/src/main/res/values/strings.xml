@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Qelay Hewler</string>
+    <string name="title_activity_main">Qelay Hewler</string>
+    <string name="package_name">com.qelay.erbildefense</string>
+    <string name="custom_url_scheme">com.qelay.erbildefense</string>
+</resources>
